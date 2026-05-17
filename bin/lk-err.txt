@@ -1,0 +1,24 @@
+2026-05-15T13:51:09.917+0530	INFO	livekit	server/main.go:210	starting in development mode
+2026-05-15T13:51:09.918+0530	INFO	livekit	server/main.go:213	no keys provided, using placeholder keys	{"API Key": "devkey", "API Secret": "secret"}
+2026-05-15T13:51:09.919+0530	ERROR	livekit	hwstats/cpu_null.go:38	CPU monitoring unsupported on current platform. Server capacity management will be disabled
+github.com/livekit/protocol/utils/hwstats.newPlatformCPUMonitor
+	/home/runner/go/pkg/mod/github.com/livekit/protocol@v1.45.3/utils/hwstats/cpu_null.go:38
+github.com/livekit/protocol/utils/hwstats.NewCPUStats
+	/home/runner/go/pkg/mod/github.com/livekit/protocol@v1.45.3/utils/hwstats/cpu.go:102
+github.com/livekit/livekit-server/pkg/telemetry/prometheus.Init
+	/home/runner/go/pkg/mod/github.com/livekit/livekit-server@v1.11.0/pkg/telemetry/prometheus/node.go:111
+main.startServer
+	/home/runner/go/pkg/mod/github.com/livekit/livekit-server@v1.11.0/cmd/server/main.go:295
+github.com/urfave/cli/v3.(*Command).run
+	/home/runner/go/pkg/mod/github.com/urfave/cli/v3@v3.8.0/command_run.go:364
+github.com/urfave/cli/v3.(*Command).Run
+	/home/runner/go/pkg/mod/github.com/urfave/cli/v3@v3.8.0/command_run.go:93
+main.main
+	/home/runner/go/pkg/mod/github.com/livekit/livekit-server@v1.11.0/cmd/server/main.go:190
+runtime.main
+	/opt/hostedtoolcache/go/1.25.0/x64/src/runtime/proc.go:285
+2026-05-15T13:51:09.921+0530	INFO	livekit	routing/interfaces.go:180	using single-node routing
+2026-05-15T13:51:09.962+0530	INFO	livekit	service/server.go:265	starting LiveKit server	{"portHttp": 7880, "nodeID": "ND_CDfWigixbsBK", "nodeIP": "192.168.106.168", "version": "1.11.0", "bindAddresses": ["0.0.0.0"], "rtc.portTCP": 7881, "rtc.portUDP": {"Start":7882,"End":0}}
+2026-05-15T13:51:09.962+0530	INFO	livekit	service/server.go:267	Windows detected, capacity management is unavailable
+2026-05-15T13:51:09.962+0530	DEBUG	livekit	service/signal.go:119	starting relay signal server	{"topic": "ND_CDfWigixbsBK"}
+2026-05-15T13:52:27.985+0530	INFO	livekit	server/main.go:311	exit requested, shutting down	{"signal": "terminated", "force": false}

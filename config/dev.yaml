@@ -1,0 +1,73 @@
+# ─── Development configuration ───────────────────────────────────────────────
+# All values have defaults; override only what you need.
+
+server:
+  host: "localhost"
+  port: 7860
+  static_dir: "client"
+
+metrics:
+  log_level: "DEBUG"
+
+vad:
+  threshold: 0.5
+  min_silence_ms: 400
+  min_speech_ms: 100
+  frame_ms: 30
+
+smart_turn:
+  audio_window_secs: 3.0
+  hard_timeout_secs: 3.0
+  err_incomplete: true
+
+stt:
+  model: "distil-large-v3"
+  language: "en"
+  beam_size: 1
+  compute_type: "auto"           # auto → int8_float16 (GPU) / int8 (CPU)
+  inference_cadence_ms: 300
+  pre_speech_buffer_secs: 0.5
+
+llm:
+  model: "gpt-5.4-nano-2026-03-17"
+  max_tokens: 300
+  temperature: 0.7
+  top_p: 0.9
+  greeting: "Hello, I'm ready. How can I help?"
+  system_prompt: >-
+    You are a helpful, concise voice assistant.
+    Keep responses brief and conversational (two or three sentences max).
+    Do not use markdown, bullet points, or code blocks.
+    Speak naturally as if in a conversation.
+  context_turns: 10
+  max_context_tokens: 4000
+  retry_delay_secs: 1.0
+
+tts:
+  model_path: "models/en_US-lessac-medium.onnx"
+  config_path: "models/en_US-lessac-medium.onnx.json"
+  speaker_id: null
+  phoneme_cache_enabled: true
+  fallback_wav_path: "assets/fallback.wav"
+  sample_rate: 22050
+
+chunker:
+  min_chars: 20
+  max_chars: 200
+  comma_threshold: 80
+  strip_markdown: true
+
+barge_in:
+  confirmation_frames: 3     # 3 × 30ms = 90ms
+  min_speech_ms: 150
+  cooldown_ms: 500
+
+state_machine:
+  processing_timeout_secs: 45.0
+  degraded_retry_delay_secs: 2.0
+
+transport:
+  audio_in_sample_rate: 16000
+  audio_out_sample_rate: 22050
+  audio_in_channels: 1
+  audio_out_channels: 1
