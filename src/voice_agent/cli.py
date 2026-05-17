@@ -236,10 +236,15 @@ async def _run_benchmark(wav_path: str) -> None:
         raw = wf.readframes(wf.getnframes())
 
     t0 = _time.monotonic()
-    result = await stt._transcribe_bytes(raw)
+    result = await stt._transcribe_async(raw)
     elapsed = (_time.monotonic() - t0) * 1000
 
-    print(json.dumps({"stt_latency_ms": round(elapsed, 1), "transcript": result}, indent=2))
+    print(
+        json.dumps(
+            {"stt_latency_ms": round(elapsed, 1), "transcript": result or ""},
+            indent=2,
+        )
+    )
     await stt.cleanup()
 
 

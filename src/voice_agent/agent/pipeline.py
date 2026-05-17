@@ -18,7 +18,7 @@ from __future__ import annotations
 import asyncio
 import json
 import time
-from typing import Any
+from typing import Any, cast
 
 import structlog
 from pipecat.audio.vad.silero import SileroVADAnalyzer
@@ -42,6 +42,7 @@ from pipecat.frames.frames import (
 )
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.task import PipelineParams, PipelineTask
+from pipecat.processors.aggregators.llm_context import LLMContextMessage
 from pipecat.processors.aggregators.llm_response_universal import (
     LLMContext,
     LLMContextAggregatorPair,
@@ -354,7 +355,9 @@ async def build_pipeline(
     await stt_service.initialize()  # loads faster-whisper model (downloads on first run)
 
     # ── LLM (pipecat native OpenAI service) ───────────────────────────────
-    llm_context = LLMContext(messages=memory.get_messages())
+    llm_context = LLMContext(
+        messages=cast(list[LLMContextMessage], memory.get_messages())
+    )
     llm_service = OpenAILLMService(
         api_key=cfg.openai_api_key,
         model=cfg.llm.model,
@@ -407,7 +410,7 @@ async def build_pipeline(
 
     task = PipelineTask(
         pipeline,
-        params=PipelineParams(allow_interruptions=True),
+        params=PipelineParams(),
         cancel_on_idle_timeout=False,
         idle_timeout_secs=None,
     )

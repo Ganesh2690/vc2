@@ -7,8 +7,10 @@ TranscriptionFrame (final, turn-complete) downstream.
 from __future__ import annotations
 
 import asyncio
+import importlib
 import time
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any, cast
 
 import numpy as np
 import structlog
@@ -44,7 +46,7 @@ class FasterWhisperSTTService(FrameProcessor):
         self._cfg = stt_config
         self._st_cfg = smart_turn_config
 
-        self._model = None  # loaded in initialize()
+        self._model: Any | None = None  # loaded in initialize()
         self._executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="stt")
 
         self._is_user_speaking = False
@@ -56,7 +58,7 @@ class FasterWhisperSTTService(FrameProcessor):
         # Smart Turn hard timeout task
         self._smart_turn_task: asyncio.Task | None = None
         self._turn_start_time: float = 0.0
-        self._smart_turn_model = None  # optional pipecat SmartTurn model
+        self._smart_turn_model: Any | None = None  # optional pipecat SmartTurn model
 
     # ─────────────────────────────────────────────────── initialisation ──
 
@@ -73,14 +75,21 @@ class FasterWhisperSTTService(FrameProcessor):
             device=device,
             compute_type=compute_type,
         )
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
+
+        def _load_model() -> Any:
+            return cast(
+                Any,
+                WhisperModel(
+                    self._cfg.model,
+                    device=device,
+                    compute_type=compute_type,
+                ),
+            )
+
         self._model = await loop.run_in_executor(
             self._executor,
-            lambda: WhisperModel(
-                self._cfg.model,
-                device=device,
-                compute_type=compute_type,
-            ),
+            _load_model,
         )
 
         # Warm up: 1 s of silence
@@ -106,9 +115,12 @@ class FasterWhisperSTTService(FrameProcessor):
 
     async def _try_load_smart_turn(self) -> None:
         try:
-            from pipecat.audio.turn.smart_turn import SmartTurnAnalyzer
+            smart_turn_module = importlib.import_module("pipecat.audio.turn.smart_turn")
+            smart_turn_analyzer = getattr(smart_turn_module, "SmartTurnAnalyzer", None)
+            if smart_turn_analyzer is None:
+                raise AttributeError("SmartTurnAnalyzer")
 
-            self._smart_turn_model = SmartTurnAnalyzer()
+            self._smart_turn_model = smart_turn_analyzer()
             log.info("smart_turn_model_loaded")
         except Exception as exc:
             log.info("smart_turn_model_unavailable", reason=str(exc))
@@ -133,9 +145,7 @@ class FasterWhisperSTTService(FrameProcessor):
 
     # ─────────────────────────────────────────────── speech event logic ──
 
-    async def _on_speech_start(
-        self, frame: UserStartedSpeakingFrame, direction: FrameDirection
-    ) -> None:
+    async def _on_speech_start(self, frame: Frame, direction: FrameDirection) -> None:
         resumed_turn = self._cancel_pending_turn_task()
         self._is_user_speaking = True
 
@@ -284,8 +294,12 @@ class FasterWhisperSTTService(FrameProcessor):
         )
 
     def _transcribe_sync(self, audio_bytes: bytes) -> str:
+        model = self._model
+        if model is None:
+            return ""
+
         samples = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
-        segments, _ = self._model.transcribe(
+        segments, _ = model.transcribe(
             samples,
             language=self._cfg.language,
             beam_size=self._cfg.beam_size,

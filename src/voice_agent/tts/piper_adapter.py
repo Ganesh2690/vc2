@@ -16,6 +16,7 @@ import time
 import wave
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import Any, cast
 
 import structlog
 from pipecat.frames.frames import (
@@ -42,7 +43,7 @@ class PiperTTSService(FrameProcessor):
     def __init__(self, config: TTSConfig) -> None:
         super().__init__()
         self._cfg = config
-        self._voice = None  # loaded in initialize()
+        self._voice: Any | None = None  # loaded in initialize()
         self._executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="tts")
         self._cancelled = False
         self._fallback_audio: bytes | None = None
@@ -63,14 +64,21 @@ class PiperTTSService(FrameProcessor):
             )
 
         log.info("loading_tts_model", model=str(model_path))
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
+
+        def _load_voice() -> Any:
+            return cast(
+                Any,
+                PiperVoice.load(
+                    str(model_path),
+                    config_path=str(config_path) if config_path.exists() else None,
+                    use_cuda=False,  # Piper uses ONNX — CUDA handled automatically
+                ),
+            )
+
         self._voice = await loop.run_in_executor(
             self._executor,
-            lambda: PiperVoice.load(
-                str(model_path),
-                config_path=str(config_path) if config_path.exists() else None,
-                use_cuda=False,  # Piper uses ONNX — CUDA handled automatically
-            ),
+            _load_voice,
         )
 
         # Warm up
@@ -162,13 +170,14 @@ class PiperTTSService(FrameProcessor):
 
     def _synthesize_phrase(self, text: str) -> list[bytes]:
         """Synthesise a phrase to a list of raw PCM chunks (blocking)."""
-        if self._voice is None:
+        voice = self._voice
+        if voice is None:
             return []
 
         chunks: list[bytes] = []
         buffer = bytearray()
 
-        for audio_chunk in self._voice.synthesize(text):
+        for audio_chunk in voice.synthesize(text):
             if self._cancelled:
                 break
             buffer.extend(audio_chunk.audio_int16_bytes)

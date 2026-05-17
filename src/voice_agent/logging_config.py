@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import TextIO
+from typing import TextIO, cast
 
 import structlog
 
@@ -37,7 +37,7 @@ def configure_logging(level: str = "INFO") -> None:
     if _LOG_FILE_HANDLE:
         _LOG_FILE_HANDLE.close()
     _LOG_FILE_HANDLE = open(log_path, "a", encoding="utf-8", buffering=1)
-    output = _Tee(sys.stdout, _LOG_FILE_HANDLE)
+    output = cast(TextIO, _Tee(sys.stdout, _LOG_FILE_HANDLE))
 
     structlog.configure(
         processors=[
