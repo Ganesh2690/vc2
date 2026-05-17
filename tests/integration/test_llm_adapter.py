@@ -6,9 +6,10 @@ Marked with @pytest.mark.integration so CI can skip with:
 from __future__ import annotations
 
 import json
+
+import httpx
 import pytest
 import respx
-import httpx
 
 
 @pytest.mark.integration

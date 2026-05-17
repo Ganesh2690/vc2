@@ -14,10 +14,8 @@ At session end, p50/p95 aggregates are logged as a structured summary.
 from __future__ import annotations
 
 import time
-from typing import Optional
 
 import structlog
-
 from pipecat.frames.frames import (
     AudioRawFrame,
     BotStartedSpeakingFrame,
@@ -31,7 +29,6 @@ from pipecat.frames.frames import (
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 
 from voice_agent.frames import InterruptFrame, MetricFrame
-from voice_agent.llm.chunker import TextChunker  # for chunk-count signal
 
 log = structlog.get_logger(__name__)
 
@@ -55,15 +52,15 @@ class MetricsCollector(FrameProcessor):
         self._turn_id = 0
 
         # Per-turn timestamps
-        self._vad_end: Optional[float] = None
-        self._stt_emit: Optional[float] = None
-        self._llm_dispatch: Optional[float] = None
-        self._llm_first_token: Optional[float] = None
-        self._tts_text_recv: Optional[float] = None
-        self._tts_first_audio: Optional[float] = None
-        self._bargein_start: Optional[float] = None
-        self._first_audio_out: Optional[float] = None
-        self._speaking_started: Optional[float] = None
+        self._vad_end: float | None = None
+        self._stt_emit: float | None = None
+        self._llm_dispatch: float | None = None
+        self._llm_first_token: float | None = None
+        self._tts_text_recv: float | None = None
+        self._tts_first_audio: float | None = None
+        self._bargein_start: float | None = None
+        self._first_audio_out: float | None = None
+        self._speaking_started: float | None = None
         self._chunk_count = 0
 
         # Session aggregates

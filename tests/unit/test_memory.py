@@ -1,8 +1,6 @@
 """Unit tests for SessionMemory."""
 from __future__ import annotations
 
-import pytest
-
 from voice_agent.memory.session_memory import SessionMemory
 
 

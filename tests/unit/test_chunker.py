@@ -5,7 +5,6 @@ import pytest
 
 from voice_agent.llm.chunker import TextChunker, strip_markdown
 
-
 # ─── strip_markdown ──────────────────────────────────────────────────────────
 
 def test_strip_code_block():
@@ -67,7 +66,6 @@ async def test_chunker_emits_on_sentence():
     # Monkey-patch push_frame to capture emitted frames
     from pipecat.frames.frames import TextFrame
     from pipecat.processors.frame_processor import FrameDirection
-    original_push = chunker.push_frame
 
     async def capture(frame, direction=FrameDirection.DOWNSTREAM):
         if isinstance(frame, TextFrame):

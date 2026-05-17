@@ -20,7 +20,6 @@ import asyncio
 import time
 
 import structlog
-
 from pipecat.frames.frames import (
     BotStartedSpeakingFrame,
     BotStoppedSpeakingFrame,

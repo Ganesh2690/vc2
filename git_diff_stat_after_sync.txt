@@ -1,0 +1,24 @@
+ src/voice_agent/agent/barge_in.py             |  1 -
+ src/voice_agent/agent/pipeline.py             | 14 ++++++--------
+ src/voice_agent/agent/state_machine.py        |  6 +++---
+ src/voice_agent/audio/preprocessing.py        |  1 -
+ src/voice_agent/cli.py                        |  8 +++++---
+ src/voice_agent/config.py                     |  3 +--
+ src/voice_agent/frames.py                     |  2 +-
+ src/voice_agent/llm/chunker.py                |  2 +-
+ src/voice_agent/logging_config.py             |  1 -
+ src/voice_agent/memory/session_memory.py      |  1 -
+ src/voice_agent/metrics/collector.py          | 21 +++++++++------------
+ src/voice_agent/protocols.py                  |  3 ++-
+ src/voice_agent/stt/faster_whisper_adapter.py | 11 +++++++----
+ src/voice_agent/transport/livekit_adapter.py  |  4 ----
+ src/voice_agent/tts/piper_adapter.py          |  6 ------
+ tests/conftest.py                             |  4 ++--
+ tests/integration/test_llm_adapter.py         |  3 ++-
+ tests/unit/test_barge_in.py                   |  4 +---
+ tests/unit/test_chunker.py                    |  2 --
+ tests/unit/test_memory.py                     |  2 --
+ tests/unit/test_state_machine.py              |  2 +-
+ tests/unit/test_stt_turns.py                  |  9 +++++++--
+ tests/unit/test_tts_frames.py                 |  2 +-
+ 23 files changed, 49 insertions(+), 63 deletions(-)

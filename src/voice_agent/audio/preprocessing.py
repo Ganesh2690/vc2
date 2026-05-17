@@ -1,7 +1,6 @@
 """Audio preprocessing: resampling and pre-speech ring buffer."""
 from __future__ import annotations
 
-import struct
 from collections import deque
 
 import numpy as np

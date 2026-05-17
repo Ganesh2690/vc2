@@ -1,10 +1,10 @@
 """Shared pytest fixtures."""
 from __future__ import annotations
 
-import pytest
 import numpy as np
+import pytest
 
-from voice_agent.agent.state_machine import ConversationState, ConversationStateMachine
+from voice_agent.agent.state_machine import ConversationStateMachine
 from voice_agent.memory.session_memory import SessionMemory
 
 

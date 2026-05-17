@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional
 
 import yaml
 from pydantic import BaseModel, Field
@@ -52,7 +51,7 @@ class LLMConfig(BaseModel):
 class TTSConfig(BaseModel):
     model_path: str = "models/en_US-lessac-medium.onnx"
     config_path: str = "models/en_US-lessac-medium.onnx.json"
-    speaker_id: Optional[int] = None
+    speaker_id: int | None = None
     phoneme_cache_enabled: bool = True
     fallback_wav_path: str = "assets/fallback.wav"
     sample_rate: int = 22050

@@ -4,7 +4,7 @@ from __future__ import annotations
 from unittest.mock import AsyncMock
 
 import pytest
-from pipecat.frames.frames import TTSAudioRawFrame, TextFrame
+from pipecat.frames.frames import TextFrame, TTSAudioRawFrame
 from pipecat.processors.frame_processor import FrameDirection
 
 from voice_agent.config import TTSConfig

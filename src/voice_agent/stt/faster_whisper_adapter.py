@@ -12,7 +12,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 import structlog
-
 from pipecat.frames.frames import (
     AudioRawFrame,
     Frame,
@@ -25,8 +24,8 @@ from pipecat.frames.frames import (
 )
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 
-from voice_agent.config import STTConfig, SmartTurnConfig
-from voice_agent.frames import TurnCompleteFrame, TurnIncompleteFrame
+from voice_agent.config import SmartTurnConfig, STTConfig
+from voice_agent.frames import TurnCompleteFrame
 
 log = structlog.get_logger(__name__)
 
@@ -297,7 +296,11 @@ class FasterWhisperSTTService(FrameProcessor):
     # ──────────────────────────────────────────────────── cleanup ─────────
 
     def _cancel_pending_turn_task(self, *, force: bool = False) -> bool:
-        if self._smart_turn_task and not self._smart_turn_task.done() and (force or self._turn_active):
+        if (
+            self._smart_turn_task
+            and not self._smart_turn_task.done()
+            and (force or self._turn_active)
+        ):
             self._smart_turn_task.cancel()
             self._smart_turn_task = None
             return True

@@ -6,10 +6,15 @@ from unittest.mock import AsyncMock
 
 import numpy as np
 import pytest
-from pipecat.frames.frames import AudioRawFrame, TranscriptionFrame, VADUserStartedSpeakingFrame, VADUserStoppedSpeakingFrame
+from pipecat.frames.frames import (
+    AudioRawFrame,
+    TranscriptionFrame,
+    VADUserStartedSpeakingFrame,
+    VADUserStoppedSpeakingFrame,
+)
 from pipecat.processors.frame_processor import FrameDirection
 
-from voice_agent.config import STTConfig, SmartTurnConfig
+from voice_agent.config import SmartTurnConfig, STTConfig
 from voice_agent.stt.faster_whisper_adapter import FasterWhisperSTTService
 
 

@@ -6,7 +6,6 @@ Interrupted agent turns (barge-in) are NOT appended.
 """
 from __future__ import annotations
 
-import time
 from typing import Any
 
 import structlog

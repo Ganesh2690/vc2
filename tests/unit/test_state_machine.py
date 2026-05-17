@@ -2,11 +2,11 @@
 from __future__ import annotations
 
 import asyncio
+
 import pytest
 
 from voice_agent.agent.state_machine import (
     ConversationState,
-    ConversationStateMachine,
     InvalidTransitionError,
 )
 

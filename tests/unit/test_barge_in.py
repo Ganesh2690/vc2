@@ -1,15 +1,13 @@
 """Unit tests for BargeInController."""
 from __future__ import annotations
 
-import asyncio
-import pytest
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
+import pytest
 from pipecat.frames.frames import (
     BotStartedSpeakingFrame,
     BotStoppedSpeakingFrame,
-    Frame,
     InterruptionFrame,
     UserStartedSpeakingFrame,
     UserStoppedSpeakingFrame,

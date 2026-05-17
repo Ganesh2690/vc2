@@ -55,10 +55,11 @@ def _make_parser() -> argparse.ArgumentParser:
 # ─────────────────────────────────────────────────────────────── start ────
 
 async def _run_start(config_path: str | None) -> None:
+    from pipecat.pipeline.runner import PipelineRunner
+
+    from voice_agent.agent.pipeline import build_pipeline
     from voice_agent.config import load_settings
     from voice_agent.transport.livekit_adapter import LiveKitServer
-    from voice_agent.agent.pipeline import build_pipeline
-    from pipecat.pipeline.runner import PipelineRunner
 
     settings = load_settings(config_path)
     configure_logging(settings.log_level)
@@ -213,8 +214,9 @@ def _run_check() -> None:
 async def _run_benchmark(wav_path: str) -> None:
     from voice_agent.config import load_settings
     configure_logging("WARNING")
+    import time as _time
+    import wave
     from pathlib import Path as _Path
-    import wave, array, time as _time
 
     wav = _Path(wav_path)
     if not wav.exists():

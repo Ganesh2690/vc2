@@ -13,8 +13,8 @@ Splitting rules (all thresholds are YAML-configurable):
 from __future__ import annotations
 
 import re
-import structlog
 
+import structlog
 from pipecat.frames.frames import (
     Frame,
     LLMFullResponseEndFrame,

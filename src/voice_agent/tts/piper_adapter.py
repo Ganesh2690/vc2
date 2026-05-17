@@ -12,21 +12,15 @@ Key behaviours:
 from __future__ import annotations
 
 import asyncio
-import struct
 import time
 import wave
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Iterator
 
-import numpy as np
 import structlog
-
 from pipecat.frames.frames import (
     CancelFrame,
-    ErrorFrame,
     Frame,
-    LLMFullResponseEndFrame,
     SystemFrame,
     TextFrame,
     TTSAudioRawFrame,

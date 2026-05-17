@@ -9,7 +9,6 @@ from typing import TextIO
 
 import structlog
 
-
 _LOG_FILE_HANDLE: TextIO | None = None
 
 
